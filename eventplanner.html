@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Planner</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+  <div class="container" style="max-width: 600px; margin: 50px auto; background-color: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+    <div id="loginContainer" class="hidden">
+      <h1>Login</h1>
+      <div class="form">
+        <label for="username">Username:</label>
+        <input type="text" id="username" placeholder="Enter username" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;">
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="Enter password" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;">
+        <button onclick="login()" style="padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Login</button>
+        <p>Don't have an account? <a href="#" onclick="showSignup()" style="color: #007bff; text-decoration: none;">Sign Up</a></p>
+      </div>
+    </div>
+    
+    <div id="signupContainer" class="hidden">
+      <h1>Sign Up</h1>
+      <div class="form">
+        <label for="newUsername">Username:</label>
+        <input type="text" id="newUsername" placeholder="Enter new username" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;">
+        <label for="newPassword">Password:</label>
+        <input type="password" id="newPassword" placeholder="Enter new password" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;">
+        <button onclick="signup()" style="padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Sign Up</button>
+        <p>Already have an account? <a href="#" onclick="showLogin()" style="color: #007bff; text-decoration: none;">Login</a></p>
+      </div>
+    </div>
+
+    <div id="eventPlanner" class="hidden">
+      <h1>Event Planner</h1>
+      <div class="form">
+        <label for="eventName">Event Name:</label>
+        <input type="text" id="eventName" placeholder="Enter event name" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;">
+        <label for="eventDate">Event Date:</label>
+        <input type="date" id="eventDate" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;">
+        <button onclick="addEvent()" style="padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Add Event</button>
+        <button onclick="logout()" style="padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Logout</button>
+      </div>
+      <div class="events">
+        <h2>Upcoming Events</h2>
+        <ul id="eventList" style="list-style-type: none; padding: 0;"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const users = [
+      { username: "user1", password: "password1", events: [] },
+      { username: "user2", password: "password2", events: [] }
+    ];
+    
+    let currentUser = null;
+    
+    function showLogin() {
+      document.getElementById("loginContainer").classList.remove("hidden");
+      document.getElementById("signupContainer").classList.add("hidden");
+      document.getElementById("eventPlanner").classList.add("hidden");
+    }
+    
+    function showSignup() {
+      document.getElementById("loginContainer").classList.add("hidden");
+      document.getElementById("signupContainer").classList.remove("hidden");
+      document.getElementById("eventPlanner").classList.add("hidden");
+    }
+    
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+    
+      const user = users.find(u => u.username === username && u.password === password);
+    
+      if (user) {
+        currentUser = user;
+        document.getElementById("loginContainer").classList.add("hidden");
+        document.getElementById("eventPlanner").classList.remove("hidden");
+        displayEvents();
+      } else {
+        alert("Invalid username or password");
+      }
+    }
+    
+    function signup() {
+      const newUsername = document.getElementById("newUsername").value;
+      const newPassword = document.getElementById("newPassword").value;
+    
+      if (newUsername.trim() === "" || newPassword.trim() === "") {
+        alert("Please enter username and password");
+        return;
+      }
+    
+      if (users.some(u => u.username === newUsername)) {
+        alert("Username already exists");
+        return;
+      }
+    
+      const newUser = { username: newUsername, password: newPassword, events: [] };
+      users.push(newUser);
+      currentUser = newUser;
+    
+      document.getElementById("signupContainer").classList.add("hidden");
+      document.getElementById("eventPlanner").classList.remove("hidden");
+      displayEvents();
+    }
+    
+    function logout() {
+      currentUser = null;
+      document.getElementById("loginContainer").classList.remove("hidden");
+      document.getElementById("eventPlanner").classList.add("hidden");
+    }
+    
+    function addEvent() {
+      const eventName = document.getElementById("eventName").value;
+      const eventDate = document.getElementById("eventDate").value;
+    
+      if (eventName.trim() === "" || eventDate.trim() === "") {
+        alert("Please enter event name and date");
+        return;
+      }
+    
+      currentUser.events.push({ name: eventName, date: eventDate });
+      displayEvents();
+    
+      // Clear input fields after adding event
+      document.getElementById("eventName").value = "";
+      document.getElementById("eventDate").value = "";
+    }
+    
+    function displayEvents() {
+      const eventList = document.getElementById("eventList");
+      eventList.innerHTML = "";
+    
+      currentUser.events.forEach(event => {
+        const li = document.createElement("li");
+        li.textContent = `${event.name} - ${event.date}`;
+        eventList.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
