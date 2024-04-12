@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Planner</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div id="loginContainer" class="hidden">
+      <h1>Login</h1>
+      <div class="form">
+        <label for="username">Username:</label>
+        <input type="text" id="username" placeholder="Enter username">
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="Enter password">
+        <button onclick="login()">Login</button>
+        <p>Don't have an account? <a href="#" onclick="showSignup()">Sign Up</a></p>
+      </div>
+    </div>
+    
+    <div id="signupContainer" class="hidden">
+      <h1>Sign Up</h1>
+      <div class="form">
+        <label for="newUsername">Username:</label>
+        <input type="text" id="newUsername" placeholder="Enter new username">
+        <label for="newPassword">Password:</label>
+        <input type="password" id="newPassword" placeholder="Enter new password">
+        <button onclick="signup()">Sign Up</button>
+        <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+      </div>
+    </div>
+
+    <div id="eventPlanner" class="hidden">
+      <h1>Event Planner</h1>
+      <div class="form">
+        <label for="eventName">Event Name:</label>
+        <input type="text" id="eventName" placeholder="Enter event name">
+        <label for="eventDate">Event Date:</label>
+        <input type="date" id="eventDate">
+        <button onclick="addEvent()">Add Event</button>
+        <button onclick="logout()">Logout</button>
+      </div>
+      <div class="events">
+        <h2>Upcoming Events</h2>
+        <ul id="eventList">
+          <!-- Event items will be added here dynamically -->
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
